@@ -23,14 +23,24 @@ self.addEventListener('fetch', event => {
   // Estratégia diferente para imagens
   if (request.destination === 'image') {
     event.respondWith(
-      caches.open(`${CACHE_NAME}-images`).then(cache =>
-        cache.match(request).then(response =>
-          response || fetch(request).then(response => {
-            cache.put(request, response.clone());
-            return response;
-          })
-        )
-      )
+      caches.match(request).then(response => {
+        // Retorna do cache se existir
+        if (response) {
+          return response;
+        }
+
+        // Se não estiver no cache, faz o fetch e armazena
+        return fetch(request).then(response => {
+          // Clona a resposta pois ela só pode ser usada uma vez
+          const responseToCache = response.clone();
+
+          caches.open(`${CACHE_NAME}-images`).then(cache => {
+            cache.put(request, responseToCache);
+          });
+
+          return response;
+        });
+      })
     );
     return;
   }

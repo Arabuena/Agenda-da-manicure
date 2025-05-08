@@ -103,7 +103,9 @@ const LazyImage = ({ src, alt, onLoad }) => {
   return (
     <>
       {!isLoaded && (
-        <div className="absolute inset-0 animate-pulse bg-gray-200" />
+        <div className="absolute inset-0 animate-pulse bg-gray-200 flex items-center justify-center">
+          <div className="text-gray-500">Carregando...</div>
+        </div>
       )}
       <img
         src={src}
@@ -128,27 +130,54 @@ export default function App() {
   const [showLGPD, setShowLGPD] = useState(true);
   const [showLGPDModal, setShowLGPDModal] = useState(false);
 
-  // Carregar backgrounds iniciais
+  // Adicione esta função no início do componente App
+  const preloadImage = (src) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = src;
+      img.onload = resolve;
+      img.onerror = reject;
+    });
+  };
+
+  // Modifique o useEffect inicial
   useEffect(() => {
     const loadInitialBackgrounds = async () => {
-      const initialBatch = backgroundUrls.slice(0, 10);
+      // Carrega apenas 5 imagens inicialmente
+      const initialBatch = backgroundUrls.slice(0, 5);
       setLoadedBackgrounds(initialBatch);
+
+      // Pré-carrega as próximas 5 imagens
+      const nextBatch = backgroundUrls.slice(5, 10);
+      try {
+        await Promise.all(nextBatch.map(bg => preloadImage(bg.src)));
+        setLoadedBackgrounds(prev => [...prev, ...nextBatch]);
+      } catch (error) {
+        console.error('Erro ao pré-carregar imagens:', error);
+      }
     };
     loadInitialBackgrounds();
   }, []);
 
-  // Carregar mais backgrounds quando necessário
+  // Modifique o loadMoreBackgrounds
   const loadMoreBackgrounds = useCallback(async () => {
     if (isLoadingMore) return;
     setIsLoadingMore(true);
     
+    const currentLength = loadedBackgrounds.length;
     const nextBatch = backgroundUrls.slice(
-      loadedBackgrounds.length,
-      loadedBackgrounds.length + 10
+      currentLength,
+      currentLength + 5 // Reduzido para 5 imagens por vez
     );
     
     if (nextBatch.length > 0) {
-      setLoadedBackgrounds(prev => [...prev, ...nextBatch]);
+      try {
+        // Pré-carrega as imagens antes de adicionar ao estado
+        await Promise.all(nextBatch.map(bg => preloadImage(bg.src)));
+        setLoadedBackgrounds(prev => [...prev, ...nextBatch]);
+      } catch (error) {
+        console.error('Erro ao carregar mais imagens:', error);
+      }
     }
     
     setIsLoadingMore(false);
