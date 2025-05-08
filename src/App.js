@@ -1,192 +1,14 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import html2canvas from "html2canvas";
 import { format } from "date-fns";
 import { ptBR } from 'date-fns/locale';
 import { Calendar } from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import bg1 from './assets/backgrounds/bg1.jpg';
-import bg2 from './assets/backgrounds/bg2.jpg';
-import bg3 from './assets/backgrounds/bg3.jpg';
-import bg4 from './assets/backgrounds/bg4.jpg';
-import bg5 from './assets/backgrounds/bg5.jpg';
-import bg6 from './assets/backgrounds/bg6.jpg';
-import bg7 from './assets/backgrounds/bg7.jpg';
-import bg8 from './assets/backgrounds/bg8.jpg';
-import bg9 from './assets/backgrounds/bg9.jpg';
-import bg10 from './assets/backgrounds/bg10.jpg';
-import bg11 from './assets/backgrounds/bg11.jpg';
-import bg12 from './assets/backgrounds/bg12.jpg';
-import bg13 from './assets/backgrounds/bg13.jpg';
-import bg14 from './assets/backgrounds/bg14.jpg';
-import bg15 from './assets/backgrounds/bg15.jpg';
-import bg16 from './assets/backgrounds/bg16.jpg';
-import bg17 from './assets/backgrounds/bg17.jpg';
-import bg18 from './assets/backgrounds/bg18.jpg';
-import bg19 from './assets/backgrounds/bg19.jpg';
-import bg20 from './assets/backgrounds/bg20.jpg';
-import bg21 from './assets/backgrounds/bg21.jpg';
-import bg22 from './assets/backgrounds/bg22.jpg';
-import bg23 from './assets/backgrounds/bg23.jpg';
-import bg24 from './assets/backgrounds/bg24.jpg';
-import bg25 from './assets/backgrounds/bg25.jpg';
-import bg26 from './assets/backgrounds/bg26.jpg';
-import bg27 from './assets/backgrounds/bg27.jpg';
-import bg28 from './assets/backgrounds/bg28.jpg';
-import bg29 from './assets/backgrounds/bg29.jpg';
-import bg30 from './assets/backgrounds/bg30.jpg';
-import bg31 from './assets/backgrounds/bg31.jpg';
-import bg32 from './assets/backgrounds/bg32.jpg';
-import bg33 from './assets/backgrounds/bg33.jpg';
-import bg34 from './assets/backgrounds/bg34.jpg';
-import bg35 from './assets/backgrounds/bg35.jpg';
-import bg36 from './assets/backgrounds/bg36.jpg';
 
-const defaultBackgrounds = [
-  {
-    src: bg1,
-    alt: "Fundo rosa com decoração"
-  },
-  {
-    src: bg2,
-    alt: "Fundo dourado com padrão"
-  },
-  {
-    src: bg3,
-    alt: "Fundo verde com flores"
-  },
-  {
-    src: bg4,
-    alt: "Fundo com decoração 4"
-  },
-  {
-    src: bg5,
-    alt: "Fundo com decoração 5"
-  },
-  {
-    src: bg6,
-    alt: "Fundo com decoração 6"
-  },
-  {
-    src: bg7,
-    alt: "Fundo com decoração 7"
-  },
-  {
-    src: bg8,
-    alt: "Fundo com decoração 8"
-  },
-  {
-    src: bg9,
-    alt: "Fundo com decoração 9"
-  },
-  {
-    src: bg10,
-    alt: "Fundo com decoração 10"
-  },
-  {
-    src: bg11,
-    alt: "Fundo com decoração 11"
-  },
-  {
-    src: bg12,
-    alt: "Fundo com decoração 12"
-  },
-  {
-    src: bg13,
-    alt: "Fundo com decoração 13"
-  },
-  {
-    src: bg14,
-    alt: "Fundo com decoração 14"
-  },
-  {
-    src: bg15,
-    alt: "Fundo com decoração 15"
-  },
-  {
-    src: bg16,
-    alt: "Fundo com decoração 16"
-  },
-  {
-    src: bg17,
-    alt: "Fundo com decoração 17"
-  },
-  {
-    src: bg18,
-    alt: "Fundo com decoração 18"
-  },
-  {
-    src: bg19,
-    alt: "Fundo com decoração 19"
-  },
-  {
-    src: bg20,
-    alt: "Fundo com decoração 20"
-  },
-  {
-    src: bg21,
-    alt: "Fundo com decoração 21"
-  },
-  {
-    src: bg22,
-    alt: "Fundo com decoração 22"
-  },
-  {
-    src: bg23,
-    alt: "Fundo com decoração 23"
-  },
-  {
-    src: bg24,
-    alt: "Fundo com decoração 24"
-  },
-  {
-    src: bg25,
-    alt: "Fundo com decoração 25"
-  },
-  {
-    src: bg26,
-    alt: "Fundo com decoração 26"
-  },
-  {
-    src: bg27,
-    alt: "Fundo com decoração 27"
-  },
-  {
-    src: bg28,
-    alt: "Fundo com decoração 28"
-  },
-  {
-    src: bg29,
-    alt: "Fundo com decoração 29"
-  },
-  {
-    src: bg30,
-    alt: "Fundo com decoração 30"
-  },
-  {
-    src: bg31,
-    alt: "Fundo com decoração 31"
-  },
-  {
-    src: bg32,
-    alt: "Fundo com decoração 32"
-  },
-  {
-    src: bg33,
-    alt: "Fundo com decoração 33"
-  },
-  {
-    src: bg34,
-    alt: "Fundo com decoração 34"
-  },
-  {
-    src: bg35,
-    alt: "Fundo com decoração 35"
-  },
-  {
-    src: bg36,
-    alt: "Fundo com decoração 36"
-  }
-];
+const backgroundUrls = Array.from({ length: 36 }, (_, i) => ({
+  src: `/backgrounds/bg${i + 1}.jpg`,
+  alt: `Fundo com decoração ${i + 1}`
+}));
 
 const specialDates = {
   1: { // Janeiro
@@ -269,22 +91,83 @@ const LGPDModal = ({ isOpen, onClose }) => {
   );
 };
 
+// Componente LazyImage para carregamento progressivo
+const LazyImage = ({ src, alt, onLoad }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  
+  const handleLoad = () => {
+    setIsLoaded(true);
+    if (onLoad) onLoad();
+  };
+  
+  return (
+    <>
+      {!isLoaded && (
+        <div className="absolute inset-0 animate-pulse bg-gray-200" />
+      )}
+      <img
+        src={src}
+        alt={alt}
+        className={`absolute w-full h-full object-cover transition-opacity duration-300 ${
+          isLoaded ? 'opacity-100' : 'opacity-0'
+        }`}
+        onLoad={handleLoad}
+      />
+    </>
+  );
+};
+
 export default function App() {
   const [date, setDate] = useState(new Date());
   const [bgIndex, setBgIndex] = useState(0);
   const [message, setMessage] = useState("");
-  const [backgrounds, setBackgrounds] = useState(defaultBackgrounds);
+  const [loadedBackgrounds, setLoadedBackgrounds] = useState([]);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const cardRef = useRef();
   const fileInputRef = useRef();
   const [showLGPD, setShowLGPD] = useState(true);
   const [showLGPDModal, setShowLGPDModal] = useState(false);
 
+  // Carregar backgrounds iniciais
+  useEffect(() => {
+    const loadInitialBackgrounds = async () => {
+      const initialBatch = backgroundUrls.slice(0, 10);
+      setLoadedBackgrounds(initialBatch);
+    };
+    loadInitialBackgrounds();
+  }, []);
+
+  // Carregar mais backgrounds quando necessário
+  const loadMoreBackgrounds = useCallback(async () => {
+    if (isLoadingMore) return;
+    setIsLoadingMore(true);
+    
+    const nextBatch = backgroundUrls.slice(
+      loadedBackgrounds.length,
+      loadedBackgrounds.length + 10
+    );
+    
+    if (nextBatch.length > 0) {
+      setLoadedBackgrounds(prev => [...prev, ...nextBatch]);
+    }
+    
+    setIsLoadingMore(false);
+  }, [loadedBackgrounds.length, isLoadingMore]);
+
+  // Verificar se precisa carregar mais backgrounds
+  useEffect(() => {
+    if (bgIndex > loadedBackgrounds.length - 5 && loadedBackgrounds.length < backgroundUrls.length) {
+      loadMoreBackgrounds();
+    }
+  }, [bgIndex, loadedBackgrounds.length, loadMoreBackgrounds]);
+
+  // Modificar os handlers de navegação
   const handleNextBg = () => {
-    setBgIndex((prev) => (prev + 1) % backgrounds.length);
+    setBgIndex((prev) => (prev + 1) % loadedBackgrounds.length);
   };
 
   const handlePrevBg = () => {
-    setBgIndex((prev) => (prev - 1 + backgrounds.length) % backgrounds.length);
+    setBgIndex((prev) => (prev - 1 + loadedBackgrounds.length) % loadedBackgrounds.length);
   };
 
   const handleImageUpload = (event) => {
@@ -296,8 +179,8 @@ export default function App() {
           src: e.target.result,
           alt: file.name
         };
-        setBackgrounds(prev => [...prev, newBackground]);
-        setBgIndex(backgrounds.length); // Muda para a nova imagem
+        setLoadedBackgrounds(prev => [...prev, newBackground]);
+        setBgIndex(loadedBackgrounds.length); // Muda para a nova imagem
       };
       reader.readAsDataURL(file);
     } else {
@@ -311,8 +194,8 @@ export default function App() {
   };
 
   const removeCurrentBackground = () => {
-    if (backgrounds.length > 1) {
-      setBackgrounds(prev => prev.filter((_, index) => index !== bgIndex));
+    if (loadedBackgrounds.length > 1) {
+      setLoadedBackgrounds(prev => prev.filter((_, index) => index !== bgIndex));
       setBgIndex(prev => prev > 0 ? prev - 1 : 0);
     } else {
       alert('Você precisa manter pelo menos um fundo!');
@@ -466,11 +349,12 @@ export default function App() {
 
       {/* Card Preview */}
       <div ref={cardRef} className="relative w-full h-[600px] rounded-lg overflow-hidden shadow-lg mb-4">
-        <img
-          src={backgrounds[bgIndex].src}
-          alt={backgrounds[bgIndex].alt}
-          className="absolute w-full h-full object-cover"
-        />
+        {loadedBackgrounds[bgIndex] && (
+          <LazyImage
+            src={loadedBackgrounds[bgIndex].src}
+            alt={loadedBackgrounds[bgIndex].alt}
+          />
+        )}
         <div className="absolute inset-0 bg-black opacity-40"></div>
         
         <div className="relative z-10 flex flex-col items-center h-full text-white">

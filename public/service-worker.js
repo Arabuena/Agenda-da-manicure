@@ -1,38 +1,58 @@
 /* eslint-disable no-restricted-globals */
 
-const CACHE_NAME = 'agenda-card-v1';
-const urlsToCache = [
+const CACHE_NAME = 'agenda-card-v2';
+const CORE_ASSETS = [
   '/',
   '/index.html',
-  '/static/js/main.chunk.js',
-  '/static/js/0.chunk.js',
-  '/static/js/bundle.js',
   '/manifest.json',
-  '/logo192.png',
-  '/logo512.png',
   '/favicon.ico'
 ];
 
+// Cache principal para arquivos essenciais
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
+      .then(cache => cache.addAll(CORE_ASSETS))
   );
 });
 
+// Cache para imagens
 self.addEventListener('fetch', event => {
+  const { request } = event;
+  
+  // Estratégia diferente para imagens
+  if (request.destination === 'image') {
+    event.respondWith(
+      caches.open(`${CACHE_NAME}-images`).then(cache =>
+        cache.match(request).then(response =>
+          response || fetch(request).then(response => {
+            cache.put(request, response.clone());
+            return response;
+          })
+        )
+      )
+    );
+    return;
+  }
+
+  // Estratégia padrão para outros recursos
   event.respondWith(
-    caches.match(event.request)
-      .then(response => response || fetch(event.request))
+    caches.match(request)
+      .then(response => response || fetch(request))
   );
 });
 
+// Limpar caches antigos
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames
-          .filter(cacheName => cacheName !== CACHE_NAME)
+          .filter(cacheName => 
+            cacheName.startsWith('agenda-card-') && 
+            cacheName !== CACHE_NAME &&
+            cacheName !== `${CACHE_NAME}-images`
+          )
           .map(cacheName => caches.delete(cacheName))
       );
     })
