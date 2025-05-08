@@ -572,6 +572,30 @@ export default function App() {
 
       {/* Footer */}
       <footer className="mt-8 pt-8 border-t text-sm text-gray-600">
+        {/* Você também pode gostar */}
+        <div className="mb-8 p-4 bg-gray-50 rounded-lg">
+          <h3 className="text-lg font-bold text-gray-800 mb-2">Você também pode gostar</h3>
+          <div className="flex flex-col items-center gap-4">
+            <a 
+              href="https://calculadora-de-vale-transporte-tan.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-4 p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow w-full"
+            >
+              <div className="bg-blue-100 p-3 rounded-full">
+                <span className="text-2xl">🚌</span>
+              </div>
+              <div className="text-left">
+                <h4 className="font-semibold text-gray-800">Calculadora de Vale Transporte</h4>
+                <p className="text-sm text-gray-600">
+                  Calcule facilmente o valor do seu vale transporte
+                </p>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        {/* Copyright e Política de Privacidade */}
         <div className="flex flex-col gap-2">
           <p>© 2024 Agenda Card - Todos os direitos reservados</p>
           <button 
