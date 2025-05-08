@@ -362,7 +362,7 @@ export default function App() {
           <span>📱 WhatsApp</span>
         </a>
         <a 
-          href="https://instagram.com/seu_instagram" 
+          href="https://instagram.com/agendacard" 
           target="_blank" 
           rel="noopener noreferrer"
           className="text-pink-500 hover:text-pink-600"
@@ -370,12 +370,20 @@ export default function App() {
           <span>📸 Instagram</span>
         </a>
         <a 
-          href="https://facebook.com/sua_pagina" 
+          href="https://facebook.com/agendacard" 
           target="_blank" 
           rel="noopener noreferrer"
           className="text-blue-500 hover:text-blue-600"
         >
           <span>👍 Facebook</span>
+        </a>
+        <a 
+          href="https://t.me/agendacard" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-blue-400 hover:text-blue-500"
+        >
+          <span>✈️ Telegram</span>
         </a>
       </div>
 
