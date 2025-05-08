@@ -1,23 +1,27 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
+import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
-const root = createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
 );
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/serviceWorker.js')
-      .then((registration) => {
-        console.log('ServiceWorker registrado com sucesso:', registration.scope);
-      })
-      .catch((error) => {
-        console.log('Falha ao registrar o ServiceWorker:', error);
+// Registra o service worker
+serviceWorkerRegistration.register({
+  onUpdate: registration => {
+    const waitingServiceWorker = registration.waiting;
+    if (waitingServiceWorker) {
+      waitingServiceWorker.addEventListener("statechange", event => {
+        if (event.target.state === "activated") {
+          window.location.reload();
+        }
       });
-  });
-} 
+      waitingServiceWorker.postMessage({ type: "SKIP_WAITING" });
+    }
+  }
+}); 
