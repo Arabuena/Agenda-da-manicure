@@ -5,10 +5,152 @@ import { ptBR } from 'date-fns/locale';
 import { Calendar } from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
-const backgroundUrls = Array.from({ length: 36 }, (_, i) => ({
-  src: `/backgrounds/bg${i + 1}.jpg`,
-  alt: `Fundo com decoração ${i + 1}`
-}));
+const backgroundUrls = [
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701224/bg1_kopzyv.jpg",
+    alt: "Fundo com decoração 1"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701224/bg2_jbxz3p.jpg",
+    alt: "Fundo com decoração 2"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701224/bg3_ibt1sq.jpg",
+    alt: "Fundo com decoração 3"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701224/bg4_ys93rx.jpg",
+    alt: "Fundo com decoração 4"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701224/bg5_wa3mg4.jpg",
+    alt: "Fundo com decoração 5"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701224/bg6_jdvmnl.jpg",
+    alt: "Fundo com decoração 6"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701225/bg7_dohk9j.jpg",
+    alt: "Fundo com decoração 7"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701225/bg8_bhgqyk.jpg",
+    alt: "Fundo com decoração 8"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701225/bg9_klttvi.jpg",
+    alt: "Fundo com decoração 9"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701225/bg10_lm4t9j.jpg",
+    alt: "Fundo com decoração 10"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701225/bg11_saceuk.jpg",
+    alt: "Fundo com decoração 11"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701229/bg12_kfck1z.jpg",
+    alt: "Fundo com decoração 12"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701230/bg13_dilrbd.jpg",
+    alt: "Fundo com decoração 13"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701230/bg14_jlmc6g.jpg",
+    alt: "Fundo com decoração 14"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701230/bg15_mcjubm.jpg",
+    alt: "Fundo com decoração 15"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701230/bg16_ldjb8m.jpg",
+    alt: "Fundo com decoração 16"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701230/bg17_wp6ois.jpg",
+    alt: "Fundo com decoração 17"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701232/bg18_syja1o.jpg",
+    alt: "Fundo com decoração 18"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701234/bg19_im8lgr.jpg",
+    alt: "Fundo com decoração 19"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701234/bg20_y10zay.jpg",
+    alt: "Fundo com decoração 20"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701234/bg21_xc1bva.jpg",
+    alt: "Fundo com decoração 21"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701235/bg22_jee4re.jpg",
+    alt: "Fundo com decoração 22"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701235/bg23_weucdp.jpg",
+    alt: "Fundo com decoração 23"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701235/bg24_ez1qa0.jpg",
+    alt: "Fundo com decoração 24"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701235/bg25_q0ehns.jpg",
+    alt: "Fundo com decoração 25"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701240/bg26_w2iecs.jpg",
+    alt: "Fundo com decoração 26"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701240/bg27_bwl1nm.jpg",
+    alt: "Fundo com decoração 27"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701240/bg28_p7y0n6.jpg",
+    alt: "Fundo com decoração 28"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701240/bg29_nuusrr.jpg",
+    alt: "Fundo com decoração 29"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701240/bg30_oz8obh.jpg",
+    alt: "Fundo com decoração 30"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701241/bg31_wdj6ps.jpg",
+    alt: "Fundo com decoração 31"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701241/bg32_icdxlx.jpg",
+    alt: "Fundo com decoração 32"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701241/bg33_c9ie5r.jpg",
+    alt: "Fundo com decoração 33"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701241/bg34_ujamfc.jpg",
+    alt: "Fundo com decoração 34"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701241/bg35_wmv482.jpg",
+    alt: "Fundo com decoração 35"
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701250/bg36_cp18kb.jpg",
+    alt: "Fundo com decoração 36"
+  }
+];
 
 const specialDates = {
   1: { // Janeiro
@@ -91,7 +233,13 @@ const LGPDModal = ({ isOpen, onClose }) => {
   );
 };
 
-// Componente LazyImage para carregamento progressivo
+// Adicionar parâmetros de otimização do Cloudinary
+const optimizeImage = (url) => {
+  // Adiciona parâmetros para otimização
+  return url.replace('/upload/', '/upload/c_scale,w_800,q_auto,f_auto/');
+};
+
+// Atualizar o componente LazyImage para usar a URL otimizada
 const LazyImage = ({ src, alt, onLoad }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(false);
@@ -127,7 +275,7 @@ const LazyImage = ({ src, alt, onLoad }) => {
         </div>
       )}
       <img
-        src={src}
+        src={optimizeImage(src)}
         alt={alt}
         className={`absolute w-full h-full object-cover transition-opacity duration-300 ${
           isLoaded ? 'opacity-100' : 'opacity-0'
@@ -163,15 +311,14 @@ export default function App() {
   // Modifique o useEffect inicial
   useEffect(() => {
     const loadInitialBackgrounds = async () => {
-      // Carrega apenas 3 imagens inicialmente
-      const initialBatch = backgroundUrls.slice(0, 3);
+      // Carrega 10 imagens inicialmente
+      const initialBatch = backgroundUrls.slice(0, 10);
       setLoadedBackgrounds(initialBatch);
 
-      // Pré-carrega as próximas 3 imagens
-      const nextBatch = backgroundUrls.slice(3, 6);
+      // Pré-carrega as próximas 10 imagens
+      const nextBatch = backgroundUrls.slice(10, 20);
       try {
-        // Adiciona um pequeno delay para não sobrecarregar
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, 300));
         await Promise.all(nextBatch.map(bg => preloadImage(bg.src)));
         setLoadedBackgrounds(prev => [...prev, ...nextBatch]);
       } catch (error) {
@@ -189,14 +336,12 @@ export default function App() {
     const currentLength = loadedBackgrounds.length;
     const nextBatch = backgroundUrls.slice(
       currentLength,
-      currentLength + 3 // Reduzido para 3 imagens por vez
+      currentLength + 10 // Aumentado para 10 imagens por vez
     );
     
     if (nextBatch.length > 0) {
       try {
-        // Adiciona um pequeno delay entre os lotes
-        await new Promise(resolve => setTimeout(resolve, 300));
-        // Pré-carrega as imagens antes de adicionar ao estado
+        await new Promise(resolve => setTimeout(resolve, 200));
         await Promise.all(nextBatch.map(bg => preloadImage(bg.src)));
         setLoadedBackgrounds(prev => [...prev, ...nextBatch]);
       } catch (error) {
@@ -207,9 +352,9 @@ export default function App() {
     setIsLoadingMore(false);
   }, [loadedBackgrounds.length, isLoadingMore]);
 
-  // Modifique o useEffect de verificação
+  // Modificar o trigger de carregamento
   useEffect(() => {
-    if (bgIndex > loadedBackgrounds.length - 3 && loadedBackgrounds.length < backgroundUrls.length) {
+    if (bgIndex > loadedBackgrounds.length - 5 && loadedBackgrounds.length < backgroundUrls.length) {
       loadMoreBackgrounds();
     }
   }, [bgIndex, loadedBackgrounds.length, loadMoreBackgrounds]);
@@ -266,17 +411,35 @@ export default function App() {
       el.classList.add('bg-[#9aad2f]');
     });
 
-    // Capturar a imagem
-    const canvas = await html2canvas(cardRef.current);
+    // Garantir que a imagem de fundo está carregada
+    await new Promise((resolve) => {
+      const img = cardRef.current.querySelector('img');
+      if (img.complete) {
+        resolve();
+      } else {
+        img.onload = resolve;
+      }
+    });
+
+    // Capturar a imagem com configurações otimizadas
+    const canvas = await html2canvas(cardRef.current, {
+      useCORS: true, // Importante para imagens de domínios diferentes
+      allowTaint: true,
+      backgroundColor: null,
+      scale: 2, // Melhor qualidade
+      logging: false,
+      imageTimeout: 0, // Sem timeout para carregamento de imagem
+    });
     
     // Restaurar os estilos originais
     Array.from(elements).forEach((el, index) => {
       el.setAttribute('class', originalStyles[index]);
     });
 
+    // Exportar com melhor qualidade
     const link = document.createElement("a");
     link.download = "card.jpg";
-    link.href = canvas.toDataURL("image/jpeg");
+    link.href = canvas.toDataURL("image/jpeg", 1.0);
     link.click();
   };
 
@@ -291,26 +454,52 @@ export default function App() {
       el.classList.add('bg-[#9aad2f]');
     });
 
-    // Capturar a imagem
-    const canvas = await html2canvas(cardRef.current);
+    // Garantir que a imagem de fundo está carregada
+    await new Promise((resolve) => {
+      const img = cardRef.current.querySelector('img');
+      if (img.complete) {
+        resolve();
+      } else {
+        img.onload = resolve;
+      }
+    });
+
+    // Capturar a imagem com configurações otimizadas
+    const canvas = await html2canvas(cardRef.current, {
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: null,
+      scale: 2,
+      logging: false,
+      imageTimeout: 0,
+    });
     
     // Restaurar os estilos originais
     Array.from(elements).forEach((el, index) => {
       el.setAttribute('class', originalStyles[index]);
     });
 
-    canvas.toBlob((blob) => {
-      const file = new File([blob], "card.jpg", { type: "image/jpeg" });
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        navigator.share({
-          files: [file],
-          title: "Meu Card de Agendamento",
-          text: "Olha só o meu card! 💅",
-        });
-      } else {
-        alert("Compartilhamento não suportado neste navegador.");
+    // Compartilhar com melhor qualidade
+    canvas.toBlob(async (blob) => {
+      try {
+        const file = new File([blob], "card.jpg", { type: "image/jpeg" });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: "Meu Card de Agendamento",
+            text: "Olha só o meu card! 💅",
+          });
+        } else {
+          // Fallback para WhatsApp Web se o compartilhamento nativo não for suportado
+          const imageUrl = canvas.toDataURL("image/jpeg", 1.0);
+          const whatsappUrl = `https://wa.me/?text=${encodeURIComponent("Olha só o meu card! 💅 ")}${encodeURIComponent(imageUrl)}`;
+          window.open(whatsappUrl);
+        }
+      } catch (error) {
+        console.error('Erro ao compartilhar:', error);
+        alert('Não foi possível compartilhar a imagem. Tente salvar e compartilhar manualmente.');
       }
-    });
+    }, 'image/jpeg', 1.0);
   };
 
   const getSpecialDatesForMonth = (date) => {
