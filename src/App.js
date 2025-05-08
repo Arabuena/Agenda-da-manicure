@@ -205,7 +205,24 @@ export default function App() {
   };
 
   const exportAsImage = async () => {
+    const elements = cardRef.current.getElementsByClassName('bg-[#9aad2f]/50');
+    
+    // Guardar os estilos originais
+    const originalStyles = [];
+    Array.from(elements).forEach(el => {
+      originalStyles.push(el.getAttribute('class'));
+      el.classList.remove('bg-[#9aad2f]/50', 'backdrop-blur-sm');
+      el.classList.add('bg-[#9aad2f]');
+    });
+
+    // Capturar a imagem
     const canvas = await html2canvas(cardRef.current);
+    
+    // Restaurar os estilos originais
+    Array.from(elements).forEach((el, index) => {
+      el.setAttribute('class', originalStyles[index]);
+    });
+
     const link = document.createElement("a");
     link.download = "card.jpg";
     link.href = canvas.toDataURL("image/jpeg");
@@ -213,7 +230,32 @@ export default function App() {
   };
 
   const shareViaWhatsApp = async () => {
+    // Temporariamente mudar os estilos para a captura
+    const elements = cardRef.current.getElementsByClassName('bg-white/30');
+    const monthYearElement = cardRef.current.querySelector('.bg-white/80');
+    
+    // Guardar os estilos originais
+    const originalStyles = [];
+    Array.from(elements).forEach(el => {
+      originalStyles.push(el.getAttribute('class'));
+      el.classList.remove('bg-white/30', 'backdrop-blur-sm');
+      el.classList.add('bg-blue-600', 'text-white');
+    });
+
+    // Ajustar o estilo do mês/ano
+    const monthYearOriginalClass = monthYearElement.getAttribute('class');
+    monthYearElement.classList.remove('bg-white/80');
+    monthYearElement.classList.add('bg-white');
+
+    // Capturar a imagem
     const canvas = await html2canvas(cardRef.current);
+    
+    // Restaurar os estilos originais
+    Array.from(elements).forEach((el, index) => {
+      el.setAttribute('class', originalStyles[index]);
+    });
+    monthYearElement.setAttribute('class', monthYearOriginalClass);
+
     canvas.toBlob((blob) => {
       const file = new File([blob], "card.jpg", { type: "image/jpeg" });
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
@@ -278,17 +320,14 @@ export default function App() {
         
         <div className="relative z-10 flex flex-col items-center h-full text-white">
           <div className="w-full text-center mt-[280px]">
-            <div className="relative z-50 bg-white/80 text-gray-800 inline-flex items-center gap-2 px-4 py-2 rounded-lg">
+            <div className="relative z-50 bg-[#9aad2f]/50 backdrop-blur-sm text-white inline-flex items-center justify-center w-3/4 px-4 py-3 rounded-lg mx-auto">
               <h2 className="text-3xl font-bold uppercase">
-                {date.toLocaleString('pt-BR', { month: 'long' }).toUpperCase()}
+                {date.toLocaleString('pt-BR', { month: 'long' }).toUpperCase()} {date.getFullYear()}
               </h2>
-              <span className="text-3xl font-bold">
-                {date.getFullYear()}
-              </span>
             </div>
           </div>
 
-          <div className="bg-white/30 backdrop-blur-sm rounded-lg p-6 w-full max-w-xs mt-8">
+          <div className="bg-[#9aad2f]/50 backdrop-blur-sm rounded-lg p-6 w-full max-w-xs mt-8">
             <h3 className="text-5xl font-bold mb-2">
               {date.getDate().toString().padStart(2, '0')}
             </h3>
@@ -297,7 +336,7 @@ export default function App() {
             </p>
           </div>
 
-          <div className="w-full bg-white/30 backdrop-blur-sm rounded-lg p-4 mt-auto mb-8">
+          <div className="w-full bg-[#9aad2f]/50 backdrop-blur-sm rounded-lg p-4 mt-auto mb-8">
             <p className="text-xl font-semibold">
               {message || "Seu horário está marcado! 💅"}
             </p>
