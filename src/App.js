@@ -230,22 +230,15 @@ export default function App() {
   };
 
   const shareViaWhatsApp = async () => {
-    // Temporariamente mudar os estilos para a captura
-    const elements = cardRef.current.getElementsByClassName('bg-white/30');
-    const monthYearElement = cardRef.current.querySelector('.bg-white/80');
+    const elements = cardRef.current.getElementsByClassName('bg-[#9aad2f]/50');
     
     // Guardar os estilos originais
     const originalStyles = [];
     Array.from(elements).forEach(el => {
       originalStyles.push(el.getAttribute('class'));
-      el.classList.remove('bg-white/30', 'backdrop-blur-sm');
-      el.classList.add('bg-blue-600', 'text-white');
+      el.classList.remove('bg-[#9aad2f]/50', 'backdrop-blur-sm');
+      el.classList.add('bg-[#9aad2f]');
     });
-
-    // Ajustar o estilo do mês/ano
-    const monthYearOriginalClass = monthYearElement.getAttribute('class');
-    monthYearElement.classList.remove('bg-white/80');
-    monthYearElement.classList.add('bg-white');
 
     // Capturar a imagem
     const canvas = await html2canvas(cardRef.current);
@@ -254,7 +247,6 @@ export default function App() {
     Array.from(elements).forEach((el, index) => {
       el.setAttribute('class', originalStyles[index]);
     });
-    monthYearElement.setAttribute('class', monthYearOriginalClass);
 
     canvas.toBlob((blob) => {
       const file = new File([blob], "card.jpg", { type: "image/jpeg" });
