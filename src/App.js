@@ -94,17 +94,36 @@ const LGPDModal = ({ isOpen, onClose }) => {
 // Componente LazyImage para carregamento progressivo
 const LazyImage = ({ src, alt, onLoad }) => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [error, setError] = useState(false);
   
   const handleLoad = () => {
     setIsLoaded(true);
     if (onLoad) onLoad();
   };
+
+  const handleError = () => {
+    setError(true);
+    console.error(`Erro ao carregar imagem: ${src}`);
+  };
   
   return (
     <>
-      {!isLoaded && (
+      {!isLoaded && !error && (
         <div className="absolute inset-0 animate-pulse bg-gray-200 flex items-center justify-center">
-          <div className="text-gray-500">Carregando...</div>
+          <div className="text-gray-500 flex flex-col items-center">
+            <svg className="animate-spin h-8 w-8 mb-2" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+            </svg>
+            <span>Carregando...</span>
+          </div>
+        </div>
+      )}
+      {error && (
+        <div className="absolute inset-0 bg-red-100 flex items-center justify-center">
+          <div className="text-red-500">
+            Erro ao carregar imagem
+          </div>
         </div>
       )}
       <img
@@ -114,6 +133,7 @@ const LazyImage = ({ src, alt, onLoad }) => {
           isLoaded ? 'opacity-100' : 'opacity-0'
         }`}
         onLoad={handleLoad}
+        onError={handleError}
       />
     </>
   );
@@ -143,13 +163,15 @@ export default function App() {
   // Modifique o useEffect inicial
   useEffect(() => {
     const loadInitialBackgrounds = async () => {
-      // Carrega apenas 5 imagens inicialmente
-      const initialBatch = backgroundUrls.slice(0, 5);
+      // Carrega apenas 3 imagens inicialmente
+      const initialBatch = backgroundUrls.slice(0, 3);
       setLoadedBackgrounds(initialBatch);
 
-      // Pré-carrega as próximas 5 imagens
-      const nextBatch = backgroundUrls.slice(5, 10);
+      // Pré-carrega as próximas 3 imagens
+      const nextBatch = backgroundUrls.slice(3, 6);
       try {
+        // Adiciona um pequeno delay para não sobrecarregar
+        await new Promise(resolve => setTimeout(resolve, 500));
         await Promise.all(nextBatch.map(bg => preloadImage(bg.src)));
         setLoadedBackgrounds(prev => [...prev, ...nextBatch]);
       } catch (error) {
@@ -167,11 +189,13 @@ export default function App() {
     const currentLength = loadedBackgrounds.length;
     const nextBatch = backgroundUrls.slice(
       currentLength,
-      currentLength + 5 // Reduzido para 5 imagens por vez
+      currentLength + 3 // Reduzido para 3 imagens por vez
     );
     
     if (nextBatch.length > 0) {
       try {
+        // Adiciona um pequeno delay entre os lotes
+        await new Promise(resolve => setTimeout(resolve, 300));
         // Pré-carrega as imagens antes de adicionar ao estado
         await Promise.all(nextBatch.map(bg => preloadImage(bg.src)));
         setLoadedBackgrounds(prev => [...prev, ...nextBatch]);
@@ -183,9 +207,9 @@ export default function App() {
     setIsLoadingMore(false);
   }, [loadedBackgrounds.length, isLoadingMore]);
 
-  // Verificar se precisa carregar mais backgrounds
+  // Modifique o useEffect de verificação
   useEffect(() => {
-    if (bgIndex > loadedBackgrounds.length - 5 && loadedBackgrounds.length < backgroundUrls.length) {
+    if (bgIndex > loadedBackgrounds.length - 3 && loadedBackgrounds.length < backgroundUrls.length) {
       loadMoreBackgrounds();
     }
   }, [bgIndex, loadedBackgrounds.length, loadMoreBackgrounds]);
