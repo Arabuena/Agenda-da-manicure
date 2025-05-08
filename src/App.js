@@ -592,6 +592,23 @@ export default function App() {
                 </p>
               </div>
             </a>
+
+            <a 
+              href="https://mercado-calculo.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-4 p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow w-full"
+            >
+              <div className="bg-green-100 p-3 rounded-full">
+                <span className="text-2xl">💰</span>
+              </div>
+              <div className="text-left">
+                <h4 className="font-semibold text-gray-800">Calculadora de Taxas</h4>
+                <p className="text-sm text-gray-600">
+                  Calcule valores de parcelas e taxas de mercado
+                </p>
+              </div>
+            </a>
           </div>
         </div>
 
