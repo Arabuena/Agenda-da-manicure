@@ -278,7 +278,7 @@ export default function App() {
         
         <div className="relative z-10 flex flex-col items-center h-full text-white">
           <div className="w-full text-center mt-[300px]">
-            <div className="bg-yellow-400 text-gray-800 inline-flex items-center gap-2 px-4 py-2 rounded-lg">
+            <div className="relative z-50 bg-white/80 text-gray-800 inline-flex items-center gap-2 px-4 py-2 rounded-lg">
               <h2 className="text-3xl font-bold uppercase">
                 {date.toLocaleString('pt-BR', { month: 'long' }).toUpperCase()}
               </h2>
@@ -288,17 +288,17 @@ export default function App() {
             </div>
           </div>
 
-          <div className="bg-yellow-400 rounded-lg p-6 w-full max-w-xs mt-8">
-            <h3 className="text-5xl font-bold mb-2 text-gray-800">
+          <div className="bg-white/30 backdrop-blur-sm rounded-lg p-6 w-full max-w-xs mt-8">
+            <h3 className="text-5xl font-bold mb-2">
               {date.getDate().toString().padStart(2, '0')}
             </h3>
-            <p className="text-2xl capitalize text-gray-800">
+            <p className="text-2xl capitalize">
               {date.toLocaleString('pt-BR', { weekday: 'long' })}
             </p>
           </div>
 
-          <div className="w-full bg-yellow-400 rounded-lg p-4 mt-auto mb-8">
-            <p className="text-xl font-semibold text-gray-800">
+          <div className="w-full bg-white/30 backdrop-blur-sm rounded-lg p-4 mt-auto mb-8">
+            <p className="text-xl font-semibold">
               {message || "Seu horário está marcado! 💅"}
             </p>
           </div>
