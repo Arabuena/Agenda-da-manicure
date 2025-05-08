@@ -351,6 +351,34 @@ export default function App() {
 
   return (
     <div className="p-4 max-w-md mx-auto text-center">
+      {/* Barra Social */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg p-4 flex justify-center items-center gap-4 z-50">
+        <a 
+          href="https://wa.me/5562982162844" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-green-500 hover:text-green-600"
+        >
+          <span>📱 WhatsApp</span>
+        </a>
+        <a 
+          href="https://instagram.com/seu_instagram" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-pink-500 hover:text-pink-600"
+        >
+          <span>📸 Instagram</span>
+        </a>
+        <a 
+          href="https://facebook.com/sua_pagina" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-blue-500 hover:text-blue-600"
+        >
+          <span>👍 Facebook</span>
+        </a>
+      </div>
+
       {/* Banner de Anúncio */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-400 text-white p-6 rounded-lg mb-6">
         <h2 className="text-2xl font-bold mb-2">Anuncie Aqui</h2>
