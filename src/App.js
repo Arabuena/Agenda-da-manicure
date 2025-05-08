@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import html2canvas from "html2canvas";
 import { format } from "date-fns";
 import { ptBR } from 'date-fns/locale';
@@ -236,6 +236,39 @@ const specialDates = {
   }
 };
 
+// Primeiro, vamos criar um componente para o Modal LGPD
+const LGPDModal = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg p-6 max-w-lg w-full">
+        <h2 className="text-xl font-bold mb-4">Política de Privacidade</h2>
+        <div className="text-left text-sm space-y-4 mb-6">
+          <p>
+            Nós utilizamos cookies e tecnologias semelhantes para melhorar a sua experiência em nossos serviços.
+            Ao utilizar nossos serviços, você concorda com tal monitoramento.
+          </p>
+          <p>
+            Os dados coletados são utilizados apenas para melhorar a experiência do usuário e não são compartilhados com terceiros.
+          </p>
+          <p>
+            Para mais informações, acesse nossa política de privacidade completa.
+          </p>
+        </div>
+        <div className="flex justify-end">
+          <button
+            onClick={onClose}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            Entendi
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function App() {
   const [date, setDate] = useState(new Date());
   const [bgIndex, setBgIndex] = useState(0);
@@ -243,6 +276,8 @@ export default function App() {
   const [backgrounds, setBackgrounds] = useState(defaultBackgrounds);
   const cardRef = useRef();
   const fileInputRef = useRef();
+  const [showLGPD, setShowLGPD] = useState(true);
+  const [showLGPDModal, setShowLGPDModal] = useState(false);
 
   const handleNextBg = () => {
     setBgIndex((prev) => (prev + 1) % backgrounds.length);
@@ -347,6 +382,18 @@ export default function App() {
     const datesForMonth = specialDates[month] || {};
     return Object.entries(datesForMonth)
       .sort(([dateA], [dateB]) => Number(dateA) - Number(dateB));
+  };
+
+  useEffect(() => {
+    const lgpdAccepted = localStorage.getItem('lgpdAccepted');
+    if (lgpdAccepted) {
+      setShowLGPD(false);
+    }
+  }, []);
+
+  const acceptLGPD = () => {
+    localStorage.setItem('lgpdAccepted', 'true');
+    setShowLGPD(false);
   };
 
   return (
@@ -499,6 +546,48 @@ export default function App() {
           )}
         </ul>
       </div>
+
+      {/* LGPD Banner */}
+      {showLGPD && (
+        <div className="fixed bottom-16 left-0 right-0 bg-gray-800 text-white p-4 shadow-lg z-50">
+          <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-sm">
+              Este site utiliza cookies para melhorar sua experiência.{" "}
+              <button 
+                onClick={() => setShowLGPDModal(true)}
+                className="underline hover:text-blue-300"
+              >
+                Saiba mais
+              </button>
+            </p>
+            <button
+              onClick={acceptLGPD}
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 whitespace-nowrap"
+            >
+              Aceitar
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Footer */}
+      <footer className="mt-8 pt-8 border-t text-sm text-gray-600">
+        <div className="flex flex-col gap-2">
+          <p>© 2024 Agenda Card - Todos os direitos reservados</p>
+          <button 
+            onClick={() => setShowLGPDModal(true)}
+            className="text-blue-500 hover:underline"
+          >
+            Política de Privacidade
+          </button>
+        </div>
+      </footer>
+
+      {/* LGPD Modal */}
+      <LGPDModal 
+        isOpen={showLGPDModal} 
+        onClose={() => setShowLGPDModal(false)} 
+      />
     </div>
   );
 } 
