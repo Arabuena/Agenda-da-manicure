@@ -24,6 +24,22 @@ import bg17 from './assets/backgrounds/bg17.jpg';
 import bg18 from './assets/backgrounds/bg18.jpg';
 import bg19 from './assets/backgrounds/bg19.jpg';
 import bg20 from './assets/backgrounds/bg20.jpg';
+import bg21 from './assets/backgrounds/bg21.jpg';
+import bg22 from './assets/backgrounds/bg22.jpg';
+import bg23 from './assets/backgrounds/bg23.jpg';
+import bg24 from './assets/backgrounds/bg24.jpg';
+import bg25 from './assets/backgrounds/bg25.jpg';
+import bg26 from './assets/backgrounds/bg26.jpg';
+import bg27 from './assets/backgrounds/bg27.jpg';
+import bg28 from './assets/backgrounds/bg28.jpg';
+import bg29 from './assets/backgrounds/bg29.jpg';
+import bg30 from './assets/backgrounds/bg30.jpg';
+import bg31 from './assets/backgrounds/bg31.jpg';
+import bg32 from './assets/backgrounds/bg32.jpg';
+import bg33 from './assets/backgrounds/bg33.jpg';
+import bg34 from './assets/backgrounds/bg34.jpg';
+import bg35 from './assets/backgrounds/bg35.jpg';
+import bg36 from './assets/backgrounds/bg36.jpg';
 
 const defaultBackgrounds = [
   {
@@ -105,6 +121,70 @@ const defaultBackgrounds = [
   {
     src: bg20,
     alt: "Fundo com decoração 20"
+  },
+  {
+    src: bg21,
+    alt: "Fundo com decoração 21"
+  },
+  {
+    src: bg22,
+    alt: "Fundo com decoração 22"
+  },
+  {
+    src: bg23,
+    alt: "Fundo com decoração 23"
+  },
+  {
+    src: bg24,
+    alt: "Fundo com decoração 24"
+  },
+  {
+    src: bg25,
+    alt: "Fundo com decoração 25"
+  },
+  {
+    src: bg26,
+    alt: "Fundo com decoração 26"
+  },
+  {
+    src: bg27,
+    alt: "Fundo com decoração 27"
+  },
+  {
+    src: bg28,
+    alt: "Fundo com decoração 28"
+  },
+  {
+    src: bg29,
+    alt: "Fundo com decoração 29"
+  },
+  {
+    src: bg30,
+    alt: "Fundo com decoração 30"
+  },
+  {
+    src: bg31,
+    alt: "Fundo com decoração 31"
+  },
+  {
+    src: bg32,
+    alt: "Fundo com decoração 32"
+  },
+  {
+    src: bg33,
+    alt: "Fundo com decoração 33"
+  },
+  {
+    src: bg34,
+    alt: "Fundo com decoração 34"
+  },
+  {
+    src: bg35,
+    alt: "Fundo com decoração 35"
+  },
+  {
+    src: bg36,
+    alt: "Fundo com decoração 36"
   }
 ];
 
