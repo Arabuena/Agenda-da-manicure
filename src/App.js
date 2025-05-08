@@ -277,19 +277,18 @@ export default function App() {
         <div className="absolute inset-0 bg-black opacity-40"></div>
         
         <div className="relative z-10 flex flex-col items-center h-full text-white">
-          <div className="w-full text-center mt-[300px]">
-            <div className="relative z-50 bg-white/80 text-gray-800 inline-flex items-center gap-2 px-4 py-2 rounded-lg">
-              <h2 className="text-3xl font-bold uppercase">
-                {date.toLocaleString('pt-BR', { month: 'long' }).toUpperCase()}
-              </h2>
-              <span className="text-3xl font-bold">
-                {date.getFullYear()}
-              </span>
+          <div className="w-full text-center mt-[200px]">
+            <div className="relative z-50 bg-blue-700 text-white inline-flex items-center justify-center w-3/4 px-4 py-3 rounded-lg mx-auto">
+              <div className="text-center">
+                <h2 className="text-3xl font-bold uppercase tracking-wider">
+                  {date.toLocaleString('pt-BR', { month: 'long' }).toUpperCase()} {date.getFullYear()}
+                </h2>
+              </div>
             </div>
           </div>
 
-          <div className="bg-white/30 backdrop-blur-sm rounded-lg p-6 w-full max-w-xs mt-8">
-            <h3 className="text-5xl font-bold mb-2">
+          <div className="bg-blue-600/90 backdrop-blur-sm rounded-lg p-6 w-full max-w-xs mt-16">
+            <h3 className="text-6xl font-bold mb-2">
               {date.getDate().toString().padStart(2, '0')}
             </h3>
             <p className="text-2xl capitalize">
@@ -297,7 +296,7 @@ export default function App() {
             </p>
           </div>
 
-          <div className="w-full bg-white/30 backdrop-blur-sm rounded-lg p-4 mt-auto mb-8">
+          <div className="w-full bg-blue-600/90 backdrop-blur-sm rounded-lg p-4 mt-auto mb-8">
             <p className="text-xl font-semibold">
               {message || "Seu horário está marcado! 💅"}
             </p>
