@@ -287,6 +287,31 @@ const LazyImage = ({ src, alt, onLoad }) => {
   );
 };
 
+// Adicione este componente no início do arquivo, junto com os outros
+const InaugurationPopup = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60] p-4">
+      <div className="bg-white rounded-lg shadow-xl max-w-lg w-full relative">
+        <button 
+          onClick={onClose}
+          className="absolute -top-3 -right-3 bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-red-600 shadow-lg z-50"
+        >
+          ✕
+        </button>
+        
+        <img 
+          src="https://res.cloudinary.com/ds6piwhzl/image/upload/v1746834031/Imagem_do_WhatsApp_de_2025-05-09_%C3%A0_s_18.24.39_c6931df2_hrx0qz.jpg" 
+          alt="Inauguração Associação Amigo do Povo" 
+          className="w-full h-auto rounded-lg"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  );
+};
+
 export default function App() {
   const [date, setDate] = useState(new Date());
   const [bgIndex, setBgIndex] = useState(0);
@@ -297,6 +322,7 @@ export default function App() {
   const fileInputRef = useRef();
   const [showLGPD, setShowLGPD] = useState(true);
   const [showLGPDModal, setShowLGPDModal] = useState(false);
+  const [showInaugurationPopup, setShowInaugurationPopup] = useState(false);
 
   // Adicione esta função no início do componente App
   const preloadImage = (src) => {
@@ -521,6 +547,15 @@ export default function App() {
     setShowLGPD(false);
   };
 
+  // Adicione este useEffect para controlar quando o popup aparece
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowInaugurationPopup(true);
+    }, 60000); // 60 segundos
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="p-4 max-w-md mx-auto text-center">
       {/* Barra Social */}
@@ -695,6 +730,12 @@ export default function App() {
           </div>
         </div>
       )}
+
+      {/* Adicione o popup antes do footer */}
+      <InaugurationPopup 
+        isOpen={showInaugurationPopup} 
+        onClose={() => setShowInaugurationPopup(false)} 
+      />
 
       {/* Footer */}
       <footer className="mt-8 pt-8 border-t text-sm text-gray-600">
