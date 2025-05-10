@@ -319,17 +319,23 @@ function MainApp() {
   };
 
   const exportAsImage = async () => {
-    // Guardar os estilos originais
-    const elements = cardRef.current.getElementsByClassName('bg-[#9aad2f]/50');
-    const originalStyles = [];
-    Array.from(elements).forEach(el => {
-      originalStyles.push(el.getAttribute('class'));
-      el.classList.remove('bg-[#9aad2f]/50', 'backdrop-blur-sm');
-      el.classList.add('bg-[#9aad2f]');
-    });
-
     try {
-      // Aguardar a imagem de fundo carregar completamente
+      // Guardar os estilos originais
+      const elements = cardRef.current.getElementsByClassName('bg-[#9aad2f]/50');
+      const originalStyles = [];
+      
+      // Guardar e modificar os estilos
+      Array.from(elements).forEach(el => {
+        originalStyles.push({
+          class: el.getAttribute('class'),
+          style: el.getAttribute('style')
+        });
+        el.classList.remove('bg-[#9aad2f]/50', 'backdrop-blur-sm');
+        el.classList.add('bg-[#9aad2f]');
+        el.style.zIndex = '999'; // Garantir que os textos fiquem visíveis
+      });
+
+      // Aguardar a imagem de fundo carregar
       const backgroundImage = cardRef.current.querySelector('img');
       await new Promise((resolve, reject) => {
         if (backgroundImage.complete) {
@@ -340,10 +346,10 @@ function MainApp() {
         }
       });
 
-      // Aguardar um pequeno delay para garantir que tudo está renderizado
+      // Pequeno delay para garantir renderização
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      // Capturar a imagem com configurações otimizadas
+      // Configurações do html2canvas
       const canvas = await html2canvas(cardRef.current, {
         useCORS: true,
         allowTaint: true,
@@ -352,14 +358,21 @@ function MainApp() {
         logging: false,
         imageTimeout: 0,
         onclone: (clonedDoc) => {
-          // Garantir que a imagem de fundo está visível no clone
           const clonedCard = clonedDoc.querySelector('[ref="cardRef"]');
           if (clonedCard) {
-            clonedCard.style.position = 'relative';
-            const clonedImg = clonedCard.querySelector('img');
-            if (clonedImg) {
-              clonedImg.style.opacity = '1';
-              clonedImg.style.visibility = 'visible';
+            // Garantir que todos os elementos de texto estejam visíveis
+            const textElements = clonedCard.querySelectorAll('.relative, .absolute');
+            textElements.forEach(el => {
+              el.style.visibility = 'visible';
+              el.style.opacity = '1';
+              el.style.zIndex = '999';
+            });
+            
+            // Garantir que a imagem de fundo esteja visível
+            const bgImage = clonedCard.querySelector('img');
+            if (bgImage) {
+              bgImage.style.opacity = '1';
+              bgImage.style.visibility = 'visible';
             }
           }
         }
@@ -367,21 +380,32 @@ function MainApp() {
 
       // Restaurar os estilos originais
       Array.from(elements).forEach((el, index) => {
-        el.setAttribute('class', originalStyles[index]);
+        el.setAttribute('class', originalStyles[index].class);
+        if (originalStyles[index].style) {
+          el.setAttribute('style', originalStyles[index].style);
+        } else {
+          el.removeAttribute('style');
+        }
       });
 
-      // Exportar com melhor qualidade
+      // Exportar a imagem
       const link = document.createElement("a");
       link.download = "card.jpg";
       link.href = canvas.toDataURL("image/jpeg", 1.0);
       link.click();
+
     } catch (error) {
       console.error('Erro ao exportar imagem:', error);
       alert('Houve um erro ao exportar a imagem. Por favor, tente novamente.');
       
-      // Restaurar os estilos originais mesmo em caso de erro
+      // Restaurar os estilos originais em caso de erro
       Array.from(elements).forEach((el, index) => {
-        el.setAttribute('class', originalStyles[index]);
+        el.setAttribute('class', originalStyles[index].class);
+        if (originalStyles[index].style) {
+          el.setAttribute('style', originalStyles[index].style);
+        } else {
+          el.removeAttribute('style');
+        }
       });
     }
   };
@@ -563,18 +587,18 @@ function MainApp() {
             alt={loadedBackgrounds[bgIndex].alt}
           />
         )}
-        <div className="absolute inset-0 bg-black opacity-40"></div>
+        <div className="absolute inset-0 bg-black opacity-40 z-[1]"></div>
         
-        <div className="relative z-10 flex flex-col items-center h-full text-white">
+        <div className="relative z-[2] flex flex-col items-center h-full text-white">
           <div className="w-full text-center mt-[280px]">
-            <div className="relative z-50 bg-[#9aad2f]/50 backdrop-blur-sm text-white inline-flex items-center justify-center w-3/4 px-4 py-3 rounded-lg mx-auto">
+            <div className="relative z-[3] bg-[#9aad2f]/50 backdrop-blur-sm text-white inline-flex items-center justify-center w-3/4 px-4 py-3 rounded-lg mx-auto">
               <h2 className="text-3xl font-bold uppercase">
                 {date.toLocaleString('pt-BR', { month: 'long' }).toUpperCase()} {date.getFullYear()}
               </h2>
             </div>
           </div>
 
-          <div className="bg-[#9aad2f]/50 backdrop-blur-sm rounded-lg p-6 w-full max-w-xs mt-8">
+          <div className="bg-[#9aad2f]/50 backdrop-blur-sm rounded-lg p-6 w-full max-w-xs mt-8 z-[3]">
             <h3 className="text-5xl font-bold mb-2">
               {date.getDate().toString().padStart(2, '0')}
             </h3>
@@ -583,7 +607,7 @@ function MainApp() {
             </p>
           </div>
 
-          <div className="w-full bg-[#9aad2f]/50 backdrop-blur-sm rounded-lg p-4 mt-auto mb-8">
+          <div className="w-full bg-[#9aad2f]/50 backdrop-blur-sm rounded-lg p-4 mt-auto mb-8 z-[3]">
             <p className="text-xl font-semibold">
               {message || "Seu horário está marcado! 💅"}
             </p>
