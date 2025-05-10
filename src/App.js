@@ -319,9 +319,8 @@ function MainApp() {
   };
 
   const exportAsImage = async () => {
-    const elements = cardRef.current.getElementsByClassName('bg-[#9aad2f]/50');
-    
     // Guardar os estilos originais
+    const elements = cardRef.current.getElementsByClassName('bg-[#9aad2f]/50');
     const originalStyles = [];
     Array.from(elements).forEach(el => {
       originalStyles.push(el.getAttribute('class'));
@@ -329,36 +328,62 @@ function MainApp() {
       el.classList.add('bg-[#9aad2f]');
     });
 
-    // Garantir que a imagem de fundo está carregada
-    await new Promise((resolve) => {
-      const img = cardRef.current.querySelector('img');
-      if (img.complete) {
-        resolve();
-      } else {
-        img.onload = resolve;
-      }
-    });
+    try {
+      // Aguardar a imagem de fundo carregar completamente
+      const backgroundImage = cardRef.current.querySelector('img');
+      await new Promise((resolve, reject) => {
+        if (backgroundImage.complete) {
+          resolve();
+        } else {
+          backgroundImage.onload = resolve;
+          backgroundImage.onerror = reject;
+        }
+      });
 
-    // Capturar a imagem com configurações otimizadas
-    const canvas = await html2canvas(cardRef.current, {
-      useCORS: true, // Importante para imagens de domínios diferentes
-      allowTaint: true,
-      backgroundColor: null,
-      scale: 2, // Melhor qualidade
-      logging: false,
-      imageTimeout: 0, // Sem timeout para carregamento de imagem
-    });
-    
-    // Restaurar os estilos originais
-    Array.from(elements).forEach((el, index) => {
-      el.setAttribute('class', originalStyles[index]);
-    });
+      // Aguardar um pequeno delay para garantir que tudo está renderizado
+      await new Promise(resolve => setTimeout(resolve, 100));
 
-    // Exportar com melhor qualidade
-    const link = document.createElement("a");
-    link.download = "card.jpg";
-    link.href = canvas.toDataURL("image/jpeg", 1.0);
-    link.click();
+      // Capturar a imagem com configurações otimizadas
+      const canvas = await html2canvas(cardRef.current, {
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: null,
+        scale: 2,
+        logging: false,
+        imageTimeout: 0,
+        onclone: (clonedDoc) => {
+          // Garantir que a imagem de fundo está visível no clone
+          const clonedCard = clonedDoc.querySelector('[ref="cardRef"]');
+          if (clonedCard) {
+            clonedCard.style.position = 'relative';
+            const clonedImg = clonedCard.querySelector('img');
+            if (clonedImg) {
+              clonedImg.style.opacity = '1';
+              clonedImg.style.visibility = 'visible';
+            }
+          }
+        }
+      });
+
+      // Restaurar os estilos originais
+      Array.from(elements).forEach((el, index) => {
+        el.setAttribute('class', originalStyles[index]);
+      });
+
+      // Exportar com melhor qualidade
+      const link = document.createElement("a");
+      link.download = "card.jpg";
+      link.href = canvas.toDataURL("image/jpeg", 1.0);
+      link.click();
+    } catch (error) {
+      console.error('Erro ao exportar imagem:', error);
+      alert('Houve um erro ao exportar a imagem. Por favor, tente novamente.');
+      
+      // Restaurar os estilos originais mesmo em caso de erro
+      Array.from(elements).forEach((el, index) => {
+        el.setAttribute('class', originalStyles[index]);
+      });
+    }
   };
 
   const shareViaWhatsApp = async () => {
@@ -527,7 +552,11 @@ function MainApp() {
       </div>
 
       {/* Card Preview */}
-      <div ref={cardRef} className="relative w-full h-[600px] rounded-lg overflow-hidden shadow-lg mb-4">
+      <div 
+        ref={cardRef} 
+        className="relative w-full h-[600px] rounded-lg overflow-hidden shadow-lg mb-4"
+        style={{ position: 'relative' }}
+      >
         {loadedBackgrounds[bgIndex] && (
           <LazyImage
             src={loadedBackgrounds[bgIndex].src}
