@@ -149,7 +149,11 @@ const backgroundUrls = [
   {
     src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746701250/bg36_cp18kb.jpg",
     alt: "Fundo com decoração 36"
-  }
+  },
+  {
+    src: "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746836920/bg37_ywxrmz.jpg",
+    alt: "Fundo ARABUNÃ PEÇANHA"
+  },
 ];
 
 const specialDates = {
