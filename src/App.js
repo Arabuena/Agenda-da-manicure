@@ -6,6 +6,7 @@ import { Calendar } from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Admin from './pages/Admin';
+import Login from './pages/Login';
 import { backgroundUrls } from './config/constants';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
@@ -183,6 +184,7 @@ export default function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/login" element={<Login />} />
         <Route path="/admin/*" element={
           <ProtectedRoute>
             <Admin />

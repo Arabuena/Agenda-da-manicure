@@ -7,7 +7,7 @@ export function register(config) {
       navigator.serviceWorker
         .register(swUrl)
         .then((registration) => {
-          // Registrado com sucesso
+          // Configuração padrão do service worker
           registration.onupdatefound = () => {
             const installingWorker = registration.installing;
             if (installingWorker == null) {
@@ -16,9 +16,14 @@ export function register(config) {
             installingWorker.onstatechange = () => {
               if (installingWorker.state === 'installed') {
                 if (navigator.serviceWorker.controller) {
-                  // Atualização disponível
+                  console.log('New content is available; please refresh.');
                   if (config && config.onUpdate) {
                     config.onUpdate(registration);
+                  }
+                } else {
+                  console.log('Content is cached for offline use.');
+                  if (config && config.onSuccess) {
+                    config.onSuccess(registration);
                   }
                 }
               }
