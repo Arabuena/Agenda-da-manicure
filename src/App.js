@@ -289,6 +289,8 @@ const LazyImage = ({ src, alt, onLoad }) => {
 
 // Adicione este componente no início do arquivo, junto com os outros
 const InaugurationPopup = ({ isOpen, onClose }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  
   if (!isOpen) return null;
 
   return (
@@ -301,11 +303,19 @@ const InaugurationPopup = ({ isOpen, onClose }) => {
           ✕
         </button>
         
+        {!imageLoaded && (
+          <div className="w-full h-64 bg-gray-100 animate-pulse rounded-lg flex items-center justify-center">
+            <span className="text-gray-400">Carregando...</span>
+          </div>
+        )}
+        
         <img 
           src="https://res.cloudinary.com/ds6piwhzl/image/upload/v1746834031/Imagem_do_WhatsApp_de_2025-05-09_%C3%A0_s_18.24.39_c6931df2_hrx0qz.jpg" 
           alt="Inauguração Associação Amigo do Povo" 
-          className="w-full h-auto rounded-lg"
+          className={`w-full h-auto rounded-lg ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
           loading="lazy"
+          onLoad={() => setImageLoaded(true)}
+          style={{ transition: 'opacity 0.3s' }}
         />
       </div>
     </div>
@@ -337,19 +347,29 @@ export default function App() {
   // Modifique o useEffect inicial
   useEffect(() => {
     const loadInitialBackgrounds = async () => {
-      // Carrega 10 imagens inicialmente
-      const initialBatch = backgroundUrls.slice(0, 10);
+      // Reduzir para 5 imagens inicialmente
+      const initialBatch = backgroundUrls.slice(0, 5);
       setLoadedBackgrounds(initialBatch);
 
-      // Pré-carrega as próximas 10 imagens
-      const nextBatch = backgroundUrls.slice(10, 20);
-      try {
-        await new Promise(resolve => setTimeout(resolve, 300));
-        await Promise.all(nextBatch.map(bg => preloadImage(bg.src)));
-        setLoadedBackgrounds(prev => [...prev, ...nextBatch]);
-      } catch (error) {
-        console.error('Erro ao pré-carregar imagens:', error);
-      }
+      // Carregar o resto em background
+      const loadRest = async () => {
+        const nextBatch = backgroundUrls.slice(5);
+        try {
+          // Carregar em lotes menores
+          for (let i = 0; i < nextBatch.length; i += 5) {
+            const batch = nextBatch.slice(i, i + 5);
+            await Promise.all(batch.map(bg => preloadImage(bg.src)));
+            setLoadedBackgrounds(prev => [...prev, ...batch]);
+            // Pequena pausa entre os lotes
+            await new Promise(resolve => setTimeout(resolve, 100));
+          }
+        } catch (error) {
+          console.error('Erro ao carregar mais imagens:', error);
+        }
+      };
+
+      // Iniciar carregamento em background após 2 segundos
+      setTimeout(loadRest, 2000);
     };
     loadInitialBackgrounds();
   }, []);
@@ -549,11 +569,21 @@ export default function App() {
 
   // Adicione este useEffect para controlar quando o popup aparece
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowInaugurationPopup(true);
-    }, 60000); // 60 segundos
+    // Pré-carregar a imagem do popup após 30 segundos
+    const preloadTimer = setTimeout(() => {
+      const img = new Image();
+      img.src = "https://res.cloudinary.com/ds6piwhzl/image/upload/v1746834031/Imagem_do_WhatsApp_de_2025-05-09_%C3%A0_s_18.24.39_c6931df2_hrx0qz.jpg";
+    }, 30000);
 
-    return () => clearTimeout(timer);
+    // Mostrar o popup após 60 segundos
+    const showTimer = setTimeout(() => {
+      setShowInaugurationPopup(true);
+    }, 60000);
+
+    return () => {
+      clearTimeout(preloadTimer);
+      clearTimeout(showTimer);
+    };
   }, []);
 
   return (
